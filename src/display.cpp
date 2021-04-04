@@ -12,7 +12,7 @@ void introScreen() {
     display.println("Welcome...");
     display.display();
     delay(1000);
-    setMenuPage('photo');
+    setMenuPage(photo);
     photoScreen();
 }
 
@@ -113,44 +113,44 @@ void printText(float num) {
 
 void FuncBtn() {
     if (millis() - getLastBtnPress() >= 250) {
-        if (getMenuPage() == 'photo') {
+        if (getMenuPage() == photo) {
             // nothing
         }
-        else if (getMenuPage() == 'photo_num') {
+        else if (getMenuPage() == photo_num) {
             // go back a page
-            setMenuPage('photo');
+            setMenuPage(photo);
             photoScreen();
         }
-        else if (getMenuPage() == 'photo_delay') {
+        else if (getMenuPage() == photo_delay) {
             // go back a page
-            setMenuPage('photo_num');
+            setMenuPage(photo_num);
             photoNumScreen();
             // reset photo num?
         }
-        else if (getMenuPage() == 'photo_trigger') {
+        else if (getMenuPage() == photo_trigger) {
             // go back a page
-            setMenuPage('photo_delay');
+            setMenuPage(photo_delay);
             photoDelayScreen();
             // reset photo delay?
         }
-        else if (getMenuPage() == 'photo_start') {
+        else if (getMenuPage() == photo_start) {
             // go back a page
-            setMenuPage('photo_trigger');
+            setMenuPage(photo_trigger);
             photoTriggerScreen();
         }
-        else if (getMenuPage() == 'photo_progress') {
+        else if (getMenuPage() == photo_progress) {
             // go back a page
-            setMenuPage('photo_start');
+            setMenuPage(photo_start);
             photoStartScreen();
             // reset progress
             // go back to starting position
         }
-        else if (getMenuPage() == 'video') {
+        else if (getMenuPage() == video) {
             // nothing
         }
-        else if (getMenuPage() == 'video_speed') {
+        else if (getMenuPage() == video_speed) {
             // go back a page
-            setMenuPage('video');
+            setMenuPage(video);
             videoScreen();
         }
         setLastBtnPress(millis());
@@ -161,34 +161,34 @@ void FuncBtn() {
 void checkEntrBtn() {
     if (millis() - getLastBtnRead() >= 50) {
         if (millis() - getLastBtnPress() >= 250) {
-            if (getMenuPage() == 'photo') {
-                setMenuPage('photo_num');
+            if (getMenuPage() == photo) {
+                setMenuPage(photo_num);
                 photoNumScreen();
             }
-            else if (getMenuPage() == 'photo_num') {
-                setMenuPage('photo_delay');
+            else if (getMenuPage() == photo_num) {
+                setMenuPage(photo_delay);
                 photoDelayScreen();
             }
-            else if (getMenuPage() == 'photo_delay') {
-                setMenuPage('photo_trigger');
+            else if (getMenuPage() == photo_delay) {
+                setMenuPage(photo_trigger);
                 photoTriggerScreen();
             }
-            else if (getMenuPage() == 'photo_trigger') {
-                setMenuPage('photo_start');
+            else if (getMenuPage() == photo_trigger) {
+                setMenuPage(photo_start);
                 photoStartScreen();
             }
-            else if (getMenuPage() == 'photo_start') {
-                setMenuPage('photo_progress');
+            else if (getMenuPage() == photo_start) {
+                setMenuPage(photo_progress);
                 photoProgressScreen();
             }
-            else if (getMenuPage() == 'photo_progress') {
+            else if (getMenuPage() == photo_progress) {
                 
             }
-            else if (getMenuPage() == 'video') {
-                setMenuPage('video_speed');
+            else if (getMenuPage() == video) {
+                setMenuPage(video_speed);
                 videoSpeedScreen();
             }
-            else if (getMenuPage() == 'video_speed') {
+            else if (getMenuPage() == video_speed) {
                 // change direction
                 if (digitalRead(ENTR_BTN) == true) {
                     setStepperDirection(getStepperDirection()*-1); // invert direction

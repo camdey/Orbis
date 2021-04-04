@@ -106,13 +106,3 @@ void setStepperDirection(int dir) {
 int getStepperDirection() {
     return stepperDirection;
 }
-
-
-
-
-
-// const int numReadings;
-// int potValues[numReadings];   // the readings from the analog input
-// int readIndex = 0;            // the index of the current reading
-// int valuesTotal = 0;          // the running total
-// int valuesAvg = 0;            // the average

@@ -3,6 +3,17 @@
 
 #include <Arduino.h>
 
+enum menu {
+  photo,
+  photo_num,
+  photo_delay,
+  photo_trigger,
+  photo_start,
+  photo_progress,
+  video,
+  video_speed
+};
+
 void setMenuPage(menu page);
 menu getMenuPage();
 void setStepperEnabled(bool enabled);
@@ -21,17 +32,6 @@ void setPrevStepperRpm(float rpm);
 float getPrevStepperRpm();
 void setStepperDirection(int dir);
 int getStepperDirection();
-
-enum menu {
-  photo,
-  photo_num,
-  photo_delay,
-  photo_trigger,
-  photo_start,
-  photo_progress,
-  video,
-  video_speed
-};
 
 
 #endif

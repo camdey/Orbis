@@ -17,6 +17,12 @@ AccelStepper        stepper     = AccelStepper(stepper.DRIVER, STEP_PIN, DIR_PIN
 Adafruit_SSD1306    display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire);
 
 
+int potValues[NUM_READINGS];    // the readings from the analog input
+int readIndex = 0;              // the index of the current reading
+int valuesTotal = 0;            // the running total
+int valuesAvg = 0;              // the average
+
+
 void setup() {
     Serial.begin(9600);
     SPI.begin();
@@ -34,7 +40,7 @@ void setup() {
         for(;;); // Don't proceed, loop forever
     }
 
-    for (int i = 0; i < numReadings; i++) {
+    for (int i = 0; i < NUM_READINGS; i++) {
         potValues[i] = 0;
     }
 
@@ -60,28 +66,28 @@ void setup() {
 
 void loop() {
     checkEntrBtn();
-    if (getMenuPage() == 'photo') {
-        
+    if (getMenuPage() == photo) {
+        //
     }
-    else if (getMenuPage() == 'photo_num') {
-
+    else if (getMenuPage() == photo_num) {
+        //
     }
-    else if (getMenuPage() == 'photo_delay') {
-
+    else if (getMenuPage() == photo_delay) {
+        //
     }
-    else if (getMenuPage() == 'photo_trigger') {
-
+    else if (getMenuPage() == photo_trigger) {
+        //
     }
-    else if (getMenuPage() == 'photo_start') {
-
+    else if (getMenuPage() == photo_start) {
+        //
     }
-    else if (getMenuPage() == 'photo_progress') {
-;
+    else if (getMenuPage() == photo_progress) {
+    //
     }
-    else if (getMenuPage() == 'video') {
-
+    else if (getMenuPage() == video) {
+        //
     }
-    else if (getMenuPage() == 'video_speed') {
+    else if (getMenuPage() == video_speed) {
         stepper.runSpeed();
         calcStepperSpeed();
     }

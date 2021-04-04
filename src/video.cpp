@@ -9,10 +9,10 @@ int getAvgReading() {
     potValues[readIndex] = checkPotentiometer();
     valuesTotal = valuesTotal + potValues[readIndex];
     readIndex = readIndex + 1;
-    if (readIndex >= numReadings) {
+    if (readIndex >= NUM_READINGS) {
         readIndex = 0;
     }
-    valuesAvg = valuesTotal / numReadings;
+    valuesAvg = valuesTotal / NUM_READINGS;
 
     return valuesAvg;
 }
