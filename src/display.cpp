@@ -2,14 +2,17 @@
 #include "Display.h"
 #include "Globals.h"
 
+// flag to keep track if funcBtn was triggered during interrupt
+bool funcBtnTriggered = false;
+
 
 void introScreen() {
     display.clearDisplay();
-    display.setTextSize(5);
+    display.setTextSize(2);
     display.setTextColor(SSD1306_WHITE);  // Draw white text
     display.setCursor(5,0);               // Start at top-left corner
     display.cp437(true);                  // Use full 256 char 'Code Page 437' font
-    display.println("Welcome...");
+    display.println(F("Welcome..."));
     display.display();
     delay(1000);
     setMenuPage(photo);
@@ -19,63 +22,63 @@ void introScreen() {
 
 void photoScreen() {
     display.clearDisplay();
-    display.setTextSize(5);
+    display.setTextSize(2);
     display.setCursor(5,0);
-    display.println("Photo");
+    display.println(F("Photo"));
     display.display();
 }
 
 
 void photoNumScreen() {
     display.clearDisplay();
-    display.setTextSize(5);
+    display.setTextSize(2);
     display.setCursor(5,0);
-    display.println("Nr Photos:");
+    display.println(F("Nr Photos:"));
     display.display();
 }
 
 
 void photoDelayScreen() {
     display.clearDisplay();
-    display.setTextSize(5);
+    display.setTextSize(2);
     display.setCursor(5,0);
-    display.println("Delay:");
+    display.println(F("Delay:"));
     display.display();
 }
 
 
 void photoTriggerScreen() {
     display.clearDisplay();
-    display.setTextSize(5);
+    display.setTextSize(2);
     display.setCursor(5,0);
-    display.println("Trigger:");
+    display.println(F("Trigger:"));
     display.display();
 }
 
 
 void photoStartScreen() {
     display.clearDisplay();
-    display.setTextSize(5);
+    display.setTextSize(2);
     display.setCursor(5,0);
-    display.println("Start?");
+    display.println(F("Start?"));
     display.display();
 }
 
 
 void photoProgressScreen() {
     display.clearDisplay();
-    display.setTextSize(5);
+    display.setTextSize(2);
     display.setCursor(5,0);
-    display.println("Progress:");
+    display.println(F("Progress:"));
     display.display();
 }
 
 
 void videoScreen() {
     display.clearDisplay();
-    display.setTextSize(5);
+    display.setTextSize(2);
     display.setCursor(5,0);
-    display.println("Progress:");
+    display.println(F("Video"));
     display.display();
     // disable stepper
     if (isStepperEnabled()) {
@@ -86,9 +89,9 @@ void videoScreen() {
 
 void videoSpeedScreen() {
     display.clearDisplay();
-    display.setTextSize(5);
+    display.setTextSize(2);
     display.setCursor(5,0);
-    display.println("Progress:");
+    display.println(F("Progress:"));
     display.display();
     // enable stepper
     if (!isStepperEnabled()) {
@@ -97,24 +100,17 @@ void videoSpeedScreen() {
 }
 
 
-void printText(float num) {
-    display.clearDisplay();
-    display.setTextSize(5);
-    display.setTextColor(SSD1306_WHITE);  // Draw white text
-    display.setCursor(5,0);               // Start at top-left corner
-    display.cp437(true);                  // Use full 256 char 'Code Page 437' font
-    display.println(num);
-    display.setTextSize(3);
-    display.setCursor(70,40);
-    display.println("RPM");
-    display.display();
+void FuncBtnInterrupt() {
+    funcBtnTriggered = true;
 }
 
 
-void FuncBtn() {
-    if (millis() - getLastBtnPress() >= 250) {
+void checkFuncBtn() {
+    if (funcBtnTriggered && millis() - getLastBtnPress() >= 250) {
         if (getMenuPage() == photo) {
-            // nothing
+            // go to video page
+            setMenuPage(video);
+            videoScreen();
         }
         else if (getMenuPage() == photo_num) {
             // go back a page
@@ -146,7 +142,9 @@ void FuncBtn() {
             // go back to starting position
         }
         else if (getMenuPage() == video) {
-            // nothing
+            // go to photo page
+            setMenuPage(photo);
+            photoScreen();
         }
         else if (getMenuPage() == video_speed) {
             // go back a page
@@ -154,13 +152,14 @@ void FuncBtn() {
             videoScreen();
         }
         setLastBtnPress(millis());
+        funcBtnTriggered = false;
     }
 }
 
 
 void checkEntrBtn() {
     if (millis() - getLastBtnRead() >= 50) {
-        if (millis() - getLastBtnPress() >= 250) {
+        if (digitalRead(ENTR_BTN) == true && millis() - getLastBtnPress() >= 250) {
             if (getMenuPage() == photo) {
                 setMenuPage(photo_num);
                 photoNumScreen();
@@ -190,9 +189,7 @@ void checkEntrBtn() {
             }
             else if (getMenuPage() == video_speed) {
                 // change direction
-                if (digitalRead(ENTR_BTN) == true) {
-                    setStepperDirection(getStepperDirection()*-1); // invert direction
-                }
+                setStepperDirection(getStepperDirection()*-1); // invert direction
             }
             setLastBtnPress(millis());
         }

@@ -26,7 +26,7 @@ void calcStepperSpeed() {
         setStepperRpm(round(map(getStepperSpeed(), 0, MAX_SPEED, 0, MAX_RPM*100)/10.00)/10.00); // convert to 0-500, divide by 10 and round, divide by 10
         if (getStepperRpm() != getPrevStepperRpm()) {
             setPrevStepperRpm(getStepperRpm());
-            printText(getStepperRpm());
+            printSpeed(getStepperRpm());
         }
     }
 }
@@ -41,6 +41,6 @@ void printSpeed(float num) {
   display.println(num);
   display.setTextSize(3);
   display.setCursor(70,40);
-  display.println("RPM");
+  display.println(F("RPM"));
   display.display();
 }

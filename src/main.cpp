@@ -58,7 +58,7 @@ void setup() {
 
     // stepper.move(10);
     stepper.setSpeed(getStepperSpeed()*getStepperDirection());
-    attachInterrupt(digitalPinToInterrupt(FUNC_BTN), FuncBtn, RISING);
+    attachInterrupt(digitalPinToInterrupt(FUNC_BTN), FuncBtnInterrupt, RISING);
 
     introScreen();
 }
@@ -66,27 +66,22 @@ void setup() {
 
 void loop() {
     checkEntrBtn();
+    checkFuncBtn();
     if (getMenuPage() == photo) {
-        //
+        // Serial.println(F("test"));
     }
-    else if (getMenuPage() == photo_num) {
-        //
-    }
-    else if (getMenuPage() == photo_delay) {
-        //
-    }
-    else if (getMenuPage() == photo_trigger) {
-        //
-    }
-    else if (getMenuPage() == photo_start) {
-        //
-    }
-    else if (getMenuPage() == photo_progress) {
-    //
-    }
-    else if (getMenuPage() == video) {
-        //
-    }
+    // else if (getMenuPage() == photo_num) {
+    // }
+    // else if (getMenuPage() == photo_delay) {
+    // }
+    // else if (getMenuPage() == photo_trigger) {
+    // }
+    // else if (getMenuPage() == photo_start) {
+    // }
+    // else if (getMenuPage() == photo_progress) {
+    // }
+    // else if (getMenuPage() == video) {
+    // }
     else if (getMenuPage() == video_speed) {
         stepper.runSpeed();
         calcStepperSpeed();

@@ -12,9 +12,9 @@ void photoStartScreen();
 void photoProgressScreen();
 void videoScreen();
 void videoSpeedScreen();
+void FuncBtnInterrupt();
+void checkFuncBtn();
 void checkEntrBtn();
-void FuncBtn();
-void printText(float num);
 int checkPotentiometer();
 
 #endif
