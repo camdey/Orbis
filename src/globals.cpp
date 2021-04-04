@@ -1,3 +1,4 @@
+#include "Main.h"
 #include "Globals.h"
 
 volatile bool stepperEnabled    = false;
@@ -8,10 +9,27 @@ int stepperSpeed                = 500;
 float stepperRpm                = 0.00;
 float prevStepperRpm            = 0.00;
 int stepperDirection            = -1;
+menu menuPage                   = photo;
+
+
+void setMenuPage(menu page) {
+    menuPage = page;
+}
+
+
+menu getMenuPage() {
+    return menuPage;
+}
 
 
 void setStepperEnabled(bool enabled) {
     stepperEnabled = enabled;
+    if (enabled) {
+        stepper.enableOutputs();
+    }
+    else if (!enabled) {
+        stepper.disableOutputs();
+    }
 }
 
 

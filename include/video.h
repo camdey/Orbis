@@ -3,5 +3,9 @@
 
 #include <Arduino.h>
 
+int getAvgReading();
+void calcStepperSpeed();
+void printSpeed(float num);
+
 
 #endif
