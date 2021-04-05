@@ -1,6 +1,6 @@
 #include "Photo.h"
 #include "Main.h"
-#include "Display.h"
+#include "Interface.h"
 #include "Globals.h"
 
 #define arraySize 17
@@ -59,36 +59,24 @@ void photo360() {
     // init settings for photo360
     if (getPhotoProgress() == 0) {
         setStepperEnabled(true);
-        stepper.setMaxSpeed(1000);
-        setStepperSpeed(1000);
-        stepper.setSpeed(getStepperSpeed());
+        stepper.setMaxSpeed(200);
+        stepper.setSpeed(200);
     }
     // if progress less than required and we're not currently moving towards next target, set new target
+    // but only set new target if delay has been exceeded
     if (getPhotoProgress() < getPhotoCount() && !isPhoto360Active()) {
-        stepper.move(stepsPerMovement);
-        setPhoto360Active(true);
+        if (millis() - getLastPhoto360Step() >= getPhotoDelay()) {
+            stepper.move(stepsPerMovement);
+            setPhoto360Active(true);
+        }
     }
     // if we reached the target position, reset flag and increment and update progress
     if (isPhoto360Active() && stepper.currentPosition() == stepper.targetPosition()) {
         setPhoto360Active(false);
         setPhotoProgress(getPhotoProgress()+1);
         photoProgressScreen();
-        delay(getPhotoDelay());
+        setLastPhoto360Step(millis());
     }
-    // for (int i=1; i <= getPhotoCount(); i++) {
-    //     stepper.move(stepsPerMovement);
-    //     while (stepper.currentPosition() != stepper.targetPosition()) {
-    //         stepper.runSpeed();
-    //     }
-    //     setPhotoProgress(i);
-    //     photoProgressScreen();
-    //     delay(getPhotoDelay());
-    // }
-    // if 360 complete, reset
-    // if (getPhotoProgress() == getPhotoCount() && stepper.currentPosition() == stepper.targetPosition()) {
-    //     setPhotoProgress(0);
-    //     stepper.setMaxSpeed(MAX_SPEED);
-    // }
 }
 
 

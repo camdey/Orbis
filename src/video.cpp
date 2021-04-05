@@ -1,24 +1,25 @@
 #include "Main.h"
 #include "Globals.h"
-#include "Display.h"
+#include "Interface.h"
 #include "Video.h"
+
+float prevStepperRpm = 0.00;
 
 
 void calcStepperSpeed() {
     int speed = map(getAvgReading(), 0, 1023, 0, MAX_SPEED); 
-    setStepperSpeed(speed);
-    stepper.setSpeed(getStepperSpeed()*getStepperDirection());
-    setStepperRpm(round(map(getStepperSpeed(), 0, MAX_SPEED, 0, MAX_RPM*100)/10.00)/10.00); // convert to 0-500, divide by 10 and round, divide by 10
-    if (getStepperRpm() != getPrevStepperRpm()) {
-        setPrevStepperRpm(getStepperRpm());
-        printSpeed(getStepperRpm());
+    stepper.setSpeed(speed*getStepperDirection());
+    float stepperRpm = round(map(speed, 0, MAX_SPEED, 0, MAX_RPM*100)/10.00)/10.00; // convert to 0-500, divide by 10 and round, divide by 10
+    if (stepperRpm != prevStepperRpm) {
+        prevStepperRpm = stepperRpm;
+        printSpeed(stepperRpm);
     }
 }
 
 
 void printSpeed(float num) {
     display.clearDisplay();
-    display.setCursor(0,0);               // Start at top-left corner
+    display.setCursor(0,0);
     display.println(num);
     display.setTextSize(3);
     display.setCursor(70,40);

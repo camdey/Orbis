@@ -1,5 +1,5 @@
 #include "Main.h"
-#include "Display.h"
+#include "Interface.h"
 #include "Globals.h"
 #include "Photo.h"
 #include "Video.h"
@@ -107,7 +107,7 @@ void checkEntrBtn() {
                 photoProgressScreen();
             }
             else if (getMenuPage() == photo_progress) {
-                // pause
+                pausePhoto360(!isPhoto360Paused());
             }
             else if (getMenuPage() == video) {
                 setMenuPage(video_speed);

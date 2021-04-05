@@ -5,15 +5,14 @@ volatile bool stepperEnabled    = false;
 long lastBtnRead                = 0;
 long lastBtnPress               = 0;
 long lastPotRead                = 0;
-int stepperSpeed                = 500;
-float stepperRpm                = 0.00;
-float prevStepperRpm            = 0.00;
 int stepperDirection            = -1;
 int photoCount                  = 6;
 int photoDelay                  = 100;
 bool photoTrigger               = false;
 int photoProgress               = 0;
 bool photo360Active             = false;
+long lastPhoto360Step           = 0;
+bool photo360Paused             = false;
 menu menuPage                   = photo;
 
 
@@ -73,36 +72,6 @@ long getLastPotRead() {
 }
 
 
-void setStepperSpeed(int speed) {
-    stepperSpeed = speed;
-}
-
-
-int getStepperSpeed() {
-    return stepperSpeed;
-}
-
-
-void setStepperRpm(float rpm) {
-    stepperRpm = rpm;
-}
-
-
-float getStepperRpm() {
-    return stepperRpm;
-}
-
-
-void setPrevStepperRpm(float rpm) {
-    prevStepperRpm = rpm;
-}
-
-
-float getPrevStepperRpm() {
-    return prevStepperRpm;
-}
-
-
 void setStepperDirection(int dir) {
     stepperDirection = dir;
 }
@@ -158,6 +127,26 @@ void setPhoto360Active(bool active) {
 }
 
 
-int isPhoto360Active() {
+bool isPhoto360Active() {
     return photo360Active;
+}
+
+
+void setLastPhoto360Step(long lastStep) {
+    lastPhoto360Step = lastStep;
+}
+
+
+long getLastPhoto360Step() {
+    return lastPhoto360Step;
+}
+
+
+void pausePhoto360(bool pause) {
+    photo360Paused = pause;
+}
+
+
+bool isPhoto360Paused() {
+    return photo360Paused;
 }

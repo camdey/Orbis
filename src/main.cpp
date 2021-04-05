@@ -5,7 +5,7 @@
 #include <TMC2130Stepper.h>
 #include "Main.h"
 #include "Globals.h"
-#include "Display.h"
+#include "Interface.h"
 #include "Photo.h"
 #include "Video.h"
 #include "Stepper.h"
@@ -50,12 +50,12 @@ void setup() {
     stepper.setMaxSpeed(MAX_SPEED);
     stepper.setEnablePin(EN_PIN);
     stepper.setPinsInverted(false, false, true);
+
     // disable stepper
     setStepperEnabled(false);
     silentStepConfig();
 
-    // stepper.move(10);
-    stepper.setSpeed(getStepperSpeed()*getStepperDirection());
+    // attach interrupt for function button
     attachInterrupt(digitalPinToInterrupt(FUNC_BTN), FuncBtnInterrupt, RISING);
 
     setDisplaySettings();
@@ -66,10 +66,7 @@ void setup() {
 void loop() {
     checkEntrBtn();
     checkFuncBtn();
-    if (getMenuPage() == photo) {
-        //
-    }
-    else if (getMenuPage() == photo_num) {
+    if (getMenuPage() == photo_num) {
         setPhotoCount();
     }
     else if (getMenuPage() == photo_delay) {
@@ -78,16 +75,12 @@ void loop() {
     else if (getMenuPage() == photo_trigger) {
         setPhotoTrigger();
     }
-    // else if (getMenuPage() == photo_start) {
-    // }
     else if (getMenuPage() == photo_progress) {
         photo360();
-        if (isPhoto360Active()) {
+        if (isPhoto360Active && !isPhoto360Paused()) {
             stepper.runSpeed();
         }
     }
-    // else if (getMenuPage() == video) {
-    // }
     else if (getMenuPage() == video_speed) {
         stepper.runSpeed();
         calcStepperSpeed();
@@ -98,11 +91,11 @@ void loop() {
  
 int freeMemory() {
     char top;
-#ifdef __arm__
-    return &top - reinterpret_cast<char*>(sbrk(0));
-#elif defined(CORE_TEENSY) || (ARDUINO > 103 && ARDUINO != 151)
-    return &top - __brkval;
-#else  // __arm__
-    return __brkval ? &top - __brkval : &top - __malloc_heap_start;
-#endif  // __arm__
+    #ifdef __arm__
+        return &top - reinterpret_cast<char*>(sbrk(0));
+    #elif defined(CORE_TEENSY) || (ARDUINO > 103 && ARDUINO != 151)
+        return &top - __brkval;
+    #else  // __arm__
+        return __brkval ? &top - __brkval : &top - __malloc_heap_start;
+    #endif  // __arm__
 }
