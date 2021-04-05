@@ -24,14 +24,12 @@ extern Adafruit_SSD1306  display;
 #define EN_PIN          7
 
 #define MAX_RPM         5
+#define NR_STEPS        200
 #define NR_MICROSTEPS   32
 #define MAX_SPEED       533 // 200 steps * 32 microsteps = 6400 / 5rpm = 533
 #define NUM_READINGS    5
 
 
-extern int potValues[NUM_READINGS];
-extern int readIndex;
-extern int valuesTotal;
-extern int valuesAvg;
+int freeMemory();
 
 #endif

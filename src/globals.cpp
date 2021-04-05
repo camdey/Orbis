@@ -9,6 +9,11 @@ int stepperSpeed                = 500;
 float stepperRpm                = 0.00;
 float prevStepperRpm            = 0.00;
 int stepperDirection            = -1;
+int photoCount                  = 6;
+int photoDelay                  = 100;
+bool photoTrigger               = false;
+int photoProgress               = 0;
+bool photo360Active             = false;
 menu menuPage                   = photo;
 
 
@@ -105,4 +110,54 @@ void setStepperDirection(int dir) {
 
 int getStepperDirection() {
     return stepperDirection;
+}
+
+
+void setPhotoCount(int count) {
+    photoCount = count;
+}
+
+
+int getPhotoCount() {
+    return photoCount;
+}
+
+
+void setPhotoDelay(int delay) {
+    photoDelay = delay;
+}
+
+
+int getPhotoDelay() {
+    return photoDelay;
+}
+
+
+void setPhotoTrigger(bool trigger) {
+    photoTrigger = trigger;
+}
+
+
+int isPhotoTriggerEnabled() {
+    return photoTrigger;
+}
+
+
+void setPhotoProgress(int progress) {
+    photoProgress = progress;
+}
+
+
+int getPhotoProgress() {
+    return photoProgress;
+}
+
+
+void setPhoto360Active(bool active) {
+    photo360Active = active;
+}
+
+
+int isPhoto360Active() {
+    return photo360Active;
 }

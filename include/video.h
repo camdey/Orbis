@@ -3,9 +3,10 @@
 
 #include <Arduino.h>
 
-int getAvgReading();
 void calcStepperSpeed();
 void printSpeed(float num);
+void videoScreen();
+void videoSpeedScreen();
 
 
 #endif

@@ -1,102 +1,26 @@
 #include "Main.h"
 #include "Display.h"
 #include "Globals.h"
+#include "Photo.h"
+#include "Video.h"
 
 // flag to keep track if funcBtn was triggered during interrupt
 bool funcBtnTriggered = false;
+int potValues[NUM_READINGS];    // the readings from the analog input
+int readIndex = 0;              // the index of the current reading
+int valuesTotal = 0;            // the running total
+int valuesAvg = 0;              // the average
 
 
 void introScreen() {
     display.clearDisplay();
     display.setTextSize(2);
-    display.setTextColor(SSD1306_WHITE);  // Draw white text
-    display.setCursor(5,0);               // Start at top-left corner
-    display.cp437(true);                  // Use full 256 char 'Code Page 437' font
+    display.setCursor(0,0);               // Start at top-left corner
     display.println(F("Welcome..."));
     display.display();
     delay(1000);
     setMenuPage(photo);
     photoScreen();
-}
-
-
-void photoScreen() {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(5,0);
-    display.println(F("Photo"));
-    display.display();
-}
-
-
-void photoNumScreen() {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(5,0);
-    display.println(F("Nr Photos:"));
-    display.display();
-}
-
-
-void photoDelayScreen() {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(5,0);
-    display.println(F("Delay:"));
-    display.display();
-}
-
-
-void photoTriggerScreen() {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(5,0);
-    display.println(F("Trigger:"));
-    display.display();
-}
-
-
-void photoStartScreen() {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(5,0);
-    display.println(F("Start?"));
-    display.display();
-}
-
-
-void photoProgressScreen() {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(5,0);
-    display.println(F("Progress:"));
-    display.display();
-}
-
-
-void videoScreen() {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(5,0);
-    display.println(F("Video"));
-    display.display();
-    // disable stepper
-    if (isStepperEnabled()) {
-        setStepperEnabled(false);
-    }
-}
-
-
-void videoSpeedScreen() {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(5,0);
-    display.println(F("Progress:"));
-    display.display();
-    // enable stepper
-    if (!isStepperEnabled()) {
-        setStepperEnabled(true);
-    }
 }
 
 
@@ -120,13 +44,13 @@ void checkFuncBtn() {
         else if (getMenuPage() == photo_delay) {
             // go back a page
             setMenuPage(photo_num);
-            photoNumScreen();
+            photoNumScreen(getPhotoCount());
             // reset photo num?
         }
         else if (getMenuPage() == photo_trigger) {
             // go back a page
             setMenuPage(photo_delay);
-            photoDelayScreen();
+            photoDelayScreen(getPhotoDelay());
             // reset photo delay?
         }
         else if (getMenuPage() == photo_start) {
@@ -138,8 +62,10 @@ void checkFuncBtn() {
             // go back a page
             setMenuPage(photo_start);
             photoStartScreen();
-            // reset progress
-            // go back to starting position
+            // reset photo360
+            setPhotoProgress(0);
+            stepper.setMaxSpeed(MAX_SPEED);
+            // go back to starting position??
         }
         else if (getMenuPage() == video) {
             // go to photo page
@@ -162,15 +88,15 @@ void checkEntrBtn() {
         if (digitalRead(ENTR_BTN) == true && millis() - getLastBtnPress() >= 250) {
             if (getMenuPage() == photo) {
                 setMenuPage(photo_num);
-                photoNumScreen();
+                photoNumScreen(getPhotoCount());
             }
             else if (getMenuPage() == photo_num) {
                 setMenuPage(photo_delay);
-                photoDelayScreen();
+                photoDelayScreen(getPhotoDelay());
             }
             else if (getMenuPage() == photo_delay) {
                 setMenuPage(photo_trigger);
-                photoTriggerScreen();
+                photoTriggerScreen(); 
             }
             else if (getMenuPage() == photo_trigger) {
                 setMenuPage(photo_start);
@@ -181,7 +107,7 @@ void checkEntrBtn() {
                 photoProgressScreen();
             }
             else if (getMenuPage() == photo_progress) {
-                
+                // pause
             }
             else if (getMenuPage() == video) {
                 setMenuPage(video_speed);
@@ -199,7 +125,40 @@ void checkEntrBtn() {
 
 
 int checkPotentiometer() {
-    int potVal = analogRead(POT_PIN);
-    potVal = map(potVal, 1023, 0, 0, MAX_SPEED);
-    return potVal;
+    if (millis() - getLastPotRead() >= 20) {
+        int potVal = analogRead(POT_PIN);
+        return potVal;
+        setLastPotRead(millis());
+    }
+}
+
+
+void initAvgArray() {
+    for (int i = 0; i < NUM_READINGS; i++) {
+        potValues[i] = 0;
+    }
+}
+
+
+int getAvgReading() {
+    valuesTotal = valuesTotal - potValues[readIndex];
+    int potVal = checkPotentiometer();
+    potVal = map(potVal, 1023, 0, 0, 1023);
+    potValues[readIndex] = potVal;
+
+    valuesTotal = valuesTotal + potValues[readIndex];
+    readIndex = readIndex + 1;
+    if (readIndex >= NUM_READINGS) {
+        readIndex = 0;
+    }
+    valuesAvg = valuesTotal / NUM_READINGS;
+
+    return valuesAvg;
+}
+
+
+void setDisplaySettings() {
+    display.setTextSize(5);
+    display.setTextColor(SSD1306_WHITE);    // Draw white text
+    display.cp437(true);    // Use full 256 char 'Code Page 437' font
 }

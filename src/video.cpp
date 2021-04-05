@@ -4,43 +4,50 @@
 #include "Video.h"
 
 
-int getAvgReading() {
-    valuesTotal = valuesTotal - potValues[readIndex];
-    potValues[readIndex] = checkPotentiometer();
-    valuesTotal = valuesTotal + potValues[readIndex];
-    readIndex = readIndex + 1;
-    if (readIndex >= NUM_READINGS) {
-        readIndex = 0;
-    }
-    valuesAvg = valuesTotal / NUM_READINGS;
-
-    return valuesAvg;
-}
-
-
 void calcStepperSpeed() {
-    if (millis() - getLastPotRead() >= 20) {
-        setStepperSpeed(getAvgReading());
-        stepper.setSpeed(getStepperSpeed()*getStepperDirection());
-        setLastPotRead(millis());
-        setStepperRpm(round(map(getStepperSpeed(), 0, MAX_SPEED, 0, MAX_RPM*100)/10.00)/10.00); // convert to 0-500, divide by 10 and round, divide by 10
-        if (getStepperRpm() != getPrevStepperRpm()) {
-            setPrevStepperRpm(getStepperRpm());
-            printSpeed(getStepperRpm());
-        }
+    int speed = map(getAvgReading(), 0, 1023, 0, MAX_SPEED); 
+    setStepperSpeed(speed);
+    stepper.setSpeed(getStepperSpeed()*getStepperDirection());
+    setStepperRpm(round(map(getStepperSpeed(), 0, MAX_SPEED, 0, MAX_RPM*100)/10.00)/10.00); // convert to 0-500, divide by 10 and round, divide by 10
+    if (getStepperRpm() != getPrevStepperRpm()) {
+        setPrevStepperRpm(getStepperRpm());
+        printSpeed(getStepperRpm());
     }
 }
 
 
 void printSpeed(float num) {
-  display.clearDisplay();
-  display.setTextSize(5);
-  display.setTextColor(SSD1306_WHITE);  // Draw white text
-  display.setCursor(5,0);               // Start at top-left corner
-  display.cp437(true);                  // Use full 256 char 'Code Page 437' font
-  display.println(num);
-  display.setTextSize(3);
-  display.setCursor(70,40);
-  display.println(F("RPM"));
-  display.display();
+    display.clearDisplay();
+    display.setCursor(0,0);               // Start at top-left corner
+    display.println(num);
+    display.setTextSize(3);
+    display.setCursor(70,40);
+    display.println(F("RPM"));
+    display.display();
+}
+
+
+void videoScreen() {
+    display.clearDisplay();
+    display.setTextSize(2);
+    display.setCursor(0,0);
+    display.println(F("Video"));
+    display.display();
+    // disable stepper
+    if (isStepperEnabled()) {
+        setStepperEnabled(false);
+    }
+}
+
+
+void videoSpeedScreen() {
+    display.clearDisplay();
+    display.setTextSize(2);
+    display.setCursor(0,0);
+    display.println(F("Progress:"));
+    display.display();
+    // enable stepper
+    if (!isStepperEnabled()) {
+        setStepperEnabled(true);
+    }
 }
