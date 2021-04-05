@@ -77,7 +77,7 @@ void loop() {
     }
     else if (getMenuPage() == photo_progress) {
         photo360();
-        if (isPhoto360Active && !isPhoto360Paused()) {
+        if (isPhoto360Active() && !isPhoto360Paused()) {
             stepper.runSpeed();
         }
     }

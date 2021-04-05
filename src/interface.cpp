@@ -105,6 +105,7 @@ void checkEntrBtn() {
             else if (getMenuPage() == photo_start) {
                 setMenuPage(photo_progress);
                 photoProgressScreen();
+                pausePhoto360(false); //unpause if paused
             }
             else if (getMenuPage() == photo_progress) {
                 pausePhoto360(!isPhoto360Paused());

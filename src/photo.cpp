@@ -57,11 +57,11 @@ void photo360() {
     // calculate number of microsteps to move for each photo
     int stepsPerMovement = (NR_STEPS*NR_MICROSTEPS) / getPhotoCount();
     // init settings for photo360
-    if (getPhotoProgress() == 0) {
-        setStepperEnabled(true);
-        stepper.setMaxSpeed(200);
-        stepper.setSpeed(200);
-    }
+    // if (getPhotoProgress() == 0) {
+    setStepperEnabled(true);
+    stepper.setMaxSpeed(200);
+    stepper.setSpeed(200);
+    // }
     // if progress less than required and we're not currently moving towards next target, set new target
     // but only set new target if delay has been exceeded
     if (getPhotoProgress() < getPhotoCount() && !isPhoto360Active()) {
