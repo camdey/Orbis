@@ -4,15 +4,16 @@
 #include <Arduino.h>
 
 
-void setPhotoCount();
-void setPhotoDelay();
-void setPhotoTrigger();
+void setPhotoCountOption();
+void setPhotoDelayOption();
+void setShutterReleaseOption();
 void photoScreen();
 void photoNumScreen(int num);
 void photoDelayScreen(int delay);
-void photoTriggerScreen();
+void shutterReleaseScreen();
 void photoStartScreen();
 void photoProgressScreen();
 void photo360();
+void releaseShutter(bool initRelease);
 
 #endif

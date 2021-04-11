@@ -8,12 +8,15 @@ long lastPotRead                = 0;
 int stepperDirection            = -1;
 int photoCount                  = 6;
 int photoDelay                  = 100;
-bool photoTrigger               = false;
+bool shutterReleaseEnabled               = false;
 int photoProgress               = 0;
 bool photo360Active             = false;
 long lastPhoto360Step           = 0;
 bool photo360Paused             = false;
 menu menuPage                   = photo;
+bool shutterReleased            = false;
+long shutterReleaseStart        = 0;
+int stepsPerMovements           = 0;
 
 
 void setMenuPage(menu page) {
@@ -102,13 +105,13 @@ int getPhotoDelay() {
 }
 
 
-void setPhotoTrigger(bool trigger) {
-    photoTrigger = trigger;
+void setShutterRelease(bool enable) {
+    shutterReleaseEnabled = enable;
 }
 
 
-int isPhotoTriggerEnabled() {
-    return photoTrigger;
+int isShutterReleaseEnabled() {
+    return shutterReleaseEnabled;
 }
 
 
@@ -149,4 +152,34 @@ void pausePhoto360(bool pause) {
 
 bool isPhoto360Paused() {
     return photo360Paused;
+}
+
+
+void setShutterReleased(bool released) {
+    shutterReleased = released;
+}
+
+
+bool isShutterReleased() {
+    return shutterReleased;
+}
+
+
+void setShutterReleaseStart(long started) {
+    shutterReleaseStart = started;
+}
+
+
+long getShutterReleaseStart() {
+    return shutterReleaseStart;
+}
+
+
+void setStepsPerMovement(int steps) {
+    stepsPerMovements = steps;
+}
+
+
+long getStepsPerMovement() {
+    return stepsPerMovements;
 }

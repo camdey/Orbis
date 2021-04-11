@@ -30,7 +30,7 @@ void printSpeed(float num) {
 
 void videoScreen() {
     display.clearDisplay();
-    display.setTextSize(2);
+    display.setTextSize(4);
     display.setCursor(0,0);
     display.println(F("Video"));
     display.display();
@@ -43,9 +43,9 @@ void videoScreen() {
 
 void videoSpeedScreen() {
     display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0,0);
-    display.println(F("Progress:"));
+    display.setTextSize(3);
+    display.setCursor(70,40);
+    display.println(F("RPM"));
     display.display();
     // enable stepper
     if (!isStepperEnabled()) {

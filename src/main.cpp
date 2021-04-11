@@ -10,12 +10,6 @@
 #include "Video.h"
 #include "Stepper.h"
 
-#ifdef __arm__
-    // should use uinstd.h to define sbrk but Due causes a conflict
-    extern "C" char* sbrk(int incr);
-#else  // __ARM__
-    extern char *__brkval;
-#endif  // __arm__
 
 TMC2130Stepper      driver      = TMC2130Stepper(EN_PIN, DIR_PIN, STEP_PIN, CS_PIN);
 AccelStepper        stepper     = AccelStepper(stepper.DRIVER, STEP_PIN, DIR_PIN);
@@ -33,6 +27,8 @@ void setup() {
     digitalWrite(CS_PIN, HIGH);
     pinMode(DIR_PIN, OUTPUT);
     digitalWrite(DIR_PIN, LOW);
+    pinMode(SHUTTER_PIN, OUTPUT);
+    digitalWrite(SHUTTER_PIN, LOW);
 
     if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
         Serial.println(F("SSD1306 allocation failed"));
@@ -67,35 +63,27 @@ void loop() {
     checkEntrBtn();
     checkFuncBtn();
     if (getMenuPage() == photo_num) {
-        setPhotoCount();
+        setPhotoCountOption();
     }
     else if (getMenuPage() == photo_delay) {
-        setPhotoDelay();
+        setPhotoDelayOption();
     }
     else if (getMenuPage() == photo_trigger) {
-        setPhotoTrigger();
+        setShutterReleaseOption();
     }
     else if (getMenuPage() == photo_progress) {
+        // (0) start photo360, (1) set new target, (2) step towards next position, or (3) pause and release shutter
         photo360();
-        if (isPhoto360Active() && !isPhoto360Paused()) {
-            stepper.runSpeed();
-        }
     }
     else if (getMenuPage() == video_speed) {
         stepper.runSpeed();
         calcStepperSpeed();
     }
-    if (millis() % 200 == 0) {Serial.println(freeMemory());}
-}
-
- 
-int freeMemory() {
-    char top;
-    #ifdef __arm__
-        return &top - reinterpret_cast<char*>(sbrk(0));
-    #elif defined(CORE_TEENSY) || (ARDUINO > 103 && ARDUINO != 151)
-        return &top - __brkval;
-    #else  // __arm__
-        return __brkval ? &top - __brkval : &top - __malloc_heap_start;
-    #endif  // __arm__
+    // if (millis() % 1000 == 0) {
+        // Serial.print(F("0. shutter state: ")); Serial.println(digitalRead(SHUTTER_PIN));
+    // bool state = digitalRead(SHUTTER_PIN);
+    // Serial.print(state);
+    // digitalWrite(SHUTTER_PIN, !state);
+    // delay(3000);
+    // }
 }

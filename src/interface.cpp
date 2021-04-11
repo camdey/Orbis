@@ -56,7 +56,7 @@ void checkFuncBtn() {
         else if (getMenuPage() == photo_start) {
             // go back a page
             setMenuPage(photo_trigger);
-            photoTriggerScreen();
+            shutterReleaseScreen();
         }
         else if (getMenuPage() == photo_progress) {
             // go back a page
@@ -96,7 +96,7 @@ void checkEntrBtn() {
             }
             else if (getMenuPage() == photo_delay) {
                 setMenuPage(photo_trigger);
-                photoTriggerScreen(); 
+                shutterReleaseScreen(); 
             }
             else if (getMenuPage() == photo_trigger) {
                 setMenuPage(photo_start);

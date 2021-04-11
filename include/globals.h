@@ -30,8 +30,8 @@ void setPhotoCount(int count);
 int getPhotoCount();
 void setPhotoDelay(int delay);
 int getPhotoDelay();
-void setPhotoTrigger(bool trigger);
-int isPhotoTriggerEnabled();
+void setShutterRelease(bool enable);
+int isShutterReleaseEnabled();
 void setPhotoProgress(int progress);
 int getPhotoProgress();
 void setPhoto360Active(bool active);
@@ -40,6 +40,11 @@ void setLastPhoto360Step(long lastStep);
 long getLastPhoto360Step();
 void pausePhoto360(bool pause);
 bool isPhoto360Paused();
-
+void setShutterReleased(bool released);
+bool isShutterReleased();
+void setShutterReleaseStart(long started);
+long getShutterReleaseStart();
+void setStepsPerMovement(int steps);
+long getStepsPerMovement();
 
 #endif
