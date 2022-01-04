@@ -79,11 +79,4 @@ void loop() {
         stepper.runSpeed();
         calcStepperSpeed();
     }
-    // if (millis() % 1000 == 0) {
-        // Serial.print(F("0. shutter state: ")); Serial.println(digitalRead(SHUTTER_PIN));
-    // bool state = digitalRead(SHUTTER_PIN);
-    // Serial.print(state);
-    // digitalWrite(SHUTTER_PIN, !state);
-    // delay(3000);
-    // }
 }
